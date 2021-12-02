@@ -9,7 +9,7 @@ fn main() {
 
 fn part_1a() -> i32 {
     let measurements = get_measurements();
-    return get_increases(measurements);
+    return get_increases(&measurements);
 }
 
 fn part_1b() -> i32 {
@@ -17,7 +17,7 @@ fn part_1b() -> i32 {
 
     let windows = measurements.iter().tuple_windows::<(_, _, _)>();
     let sum = windows.map(|(a, b, c)| a + b + c);
-    return get_increases(sum.collect_vec());
+    return get_increases(&sum.collect_vec());
 }
 
 
@@ -35,7 +35,7 @@ fn get_measurements() -> Vec<i32> {
  * Given a vector of numbers, return the number of times the value increases over two successive
  * elements.
  */
-fn get_increases(values: Vec<i32>) -> i32 {
+fn get_increases(values: &[i32]) -> i32 {
     let (increases, _) = values.iter().fold((0, None), |(increases, prev), item| {
         if let Some(value) = prev {
             if value < item {
