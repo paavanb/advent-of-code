@@ -68,6 +68,6 @@ fn get_data(filename: &str) -> Vec<u8> {
     fs::read_to_string(filename).expect("Something went wrong.")
         .trim_end()
         .split(",")
-        .map(|s| s.parse::<u8>().expect("Expected u32."))
+        .map(|s| s.parse::<u8>().expect("Expected u8."))
         .collect()
 }
