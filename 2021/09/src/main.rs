@@ -1,5 +1,5 @@
-use std::fs;
 use std::collections::{HashSet, VecDeque};
+use std::fs;
 
 const DATA_FILE: &str = "data/cave_heightmap.txt";
 
@@ -16,8 +16,10 @@ fn main() {
 }
 
 fn part_one(heightmap: &Vec<Vec<u8>>) -> u32 {
-    get_local_minima(heightmap).into_iter()
-        .map(|p| heightmap[p.row][p.col] as u32 + 1).sum()
+    get_local_minima(heightmap)
+        .into_iter()
+        .map(|p| heightmap[p.row][p.col] as u32 + 1)
+        .sum()
 }
 
 fn part_two(heightmap: &Vec<Vec<u8>>) -> u32 {
@@ -26,7 +28,11 @@ fn part_two(heightmap: &Vec<Vec<u8>>) -> u32 {
 
     for minimum in local_minima {
         // Skip a minimum if it is already contained in an existing basin
-        if basins.to_owned().into_iter().any(|basin| basin.contains(&minimum)) {
+        if basins
+            .to_owned()
+            .into_iter()
+            .any(|basin| basin.contains(&minimum))
+        {
             continue;
         }
 
@@ -34,8 +40,7 @@ fn part_two(heightmap: &Vec<Vec<u8>>) -> u32 {
     }
 
     // Sort high to low
-    basins
-        .sort_unstable_by(|basin_1, basin_2| basin_2.len().cmp(&basin_1.len()));
+    basins.sort_unstable_by(|basin_1, basin_2| basin_2.len().cmp(&basin_1.len()));
 
     if basins.len() < 3 {
         panic!("Expected at least three basins.");
@@ -53,7 +58,8 @@ fn get_basin(heightmap: &Vec<Vec<u8>>, position: Position) -> HashSet<Position> 
         let node = nodes.pop_back().expect("Unreachable.");
         let neighbors = get_neighbors(heightmap, node);
 
-        let new_neighbors_in_basin = neighbors.into_iter()
+        let new_neighbors_in_basin = neighbors
+            .into_iter()
             .filter(|p| heightmap[p.row][p.col] < 9 && !basin.contains(p))
             .collect::<Vec<_>>();
 
@@ -69,10 +75,13 @@ fn get_local_minima(heightmap: &Vec<Vec<u8>>) -> Vec<Position> {
     for row in 0..heightmap.len() {
         for col in 0..heightmap[0].len() {
             let height = heightmap[row][col];
-            let neighbors = get_neighbors(heightmap, Position {row, col});
+            let neighbors = get_neighbors(heightmap, Position { row, col });
 
-            if neighbors.into_iter().all(|p| heightmap[p.row][p.col] > height) {
-                local_minima.push(Position{ row, col });
+            if neighbors
+                .into_iter()
+                .all(|p| heightmap[p.row][p.col] > height)
+            {
+                local_minima.push(Position { row, col });
             }
         }
     }
@@ -86,31 +95,45 @@ fn get_neighbors(heightmap: &Vec<Vec<u8>>, pos: Position) -> Vec<Position> {
     let col = pos.col;
 
     if row > 0 {
-        neighbors.push(Position { row: row - 1, col: col});
+        neighbors.push(Position {
+            row: row - 1,
+            col: col,
+        });
     }
 
     if row < heightmap.len() - 1 {
-        neighbors.push(Position { row: row + 1, col: col});
+        neighbors.push(Position {
+            row: row + 1,
+            col: col,
+        });
     }
 
     if col > 0 {
-        neighbors.push(Position { row: row, col: col - 1});
+        neighbors.push(Position {
+            row: row,
+            col: col - 1,
+        });
     }
 
     if col < heightmap[row].len() - 1 {
-        neighbors.push(Position { row: row, col: col + 1});
+        neighbors.push(Position {
+            row: row,
+            col: col + 1,
+        });
     }
 
     return neighbors;
 }
 
 fn get_heightmap(filename: &str) -> Vec<Vec<u8>> {
-    fs::read_to_string(filename).expect("Something went wrong.")
+    fs::read_to_string(filename)
+        .expect("Something went wrong.")
         .trim_end()
         .split("\n")
         .map(|s| {
             s.chars()
-                .map(|c| c.to_string().parse::<u8>().expect("Expected u8")).collect()
+                .map(|c| c.to_string().parse::<u8>().expect("Expected u8"))
+                .collect()
         })
         .collect()
 }

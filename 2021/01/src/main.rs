@@ -1,6 +1,5 @@
-use std::fs;
 use itertools::Itertools;
-
+use std::fs;
 
 fn main() {
     println!("Part 1a: {}", part_1a());
@@ -20,13 +19,16 @@ fn part_1b() -> i32 {
     return get_increases(&sum.collect_vec());
 }
 
-
 /**
  * Grab measurements from puzzle input file.
  */
 fn get_measurements() -> Vec<i32> {
     let contents = fs::read_to_string("data/sonar_sweeps.txt").expect("Something went wrong.");
-    let measurements = contents.trim_end().split("\n").map(|s| s.parse::<i32>().unwrap()).collect_vec();
+    let measurements = contents
+        .trim_end()
+        .split("\n")
+        .map(|s| s.parse::<i32>().unwrap())
+        .collect_vec();
 
     return measurements;
 }
@@ -39,10 +41,10 @@ fn get_increases(values: &[i32]) -> i32 {
     let (increases, _) = values.iter().fold((0, None), |(increases, prev), item| {
         if let Some(value) = prev {
             if value < item {
-                return (increases + 1, Some(item))
+                return (increases + 1, Some(item));
             }
         }
-        return (increases, Some(item))
+        return (increases, Some(item));
     });
 
     return increases;

@@ -1,11 +1,10 @@
-use std::fs;
 use std::collections::HashMap;
+use std::fs;
 
 const DATA_FILE: &str = "data/lanternfish.txt";
 
 // Map from counter value to the number of fish with that counter value
 type FishState = HashMap<u8, u64>;
-
 
 fn main() {
     let fish_state = get_fish_state(DATA_FILE);
@@ -44,7 +43,12 @@ fn update_state(fish_state: &FishState) -> FishState {
 fn add_fish(fish_state: &mut FishState, counter: u8, amount: u64) {
     fish_state.insert(
         counter,
-        amount + if fish_state.contains_key(&counter) { fish_state[&counter] } else { 0 }
+        amount
+            + if fish_state.contains_key(&counter) {
+                fish_state[&counter]
+            } else {
+                0
+            },
     );
 }
 
@@ -65,7 +69,8 @@ fn get_fish_state(filename: &str) -> FishState {
 }
 
 fn get_data(filename: &str) -> Vec<u8> {
-    fs::read_to_string(filename).expect("Something went wrong.")
+    fs::read_to_string(filename)
+        .expect("Something went wrong.")
         .trim_end()
         .split(",")
         .map(|s| s.parse::<u8>().expect("Expected u8."))

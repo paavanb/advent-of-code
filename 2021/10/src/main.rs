@@ -1,5 +1,5 @@
+use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::collections::{HashSet, HashMap};
 
 const DATA_FILE: &str = "data/navigation_subsystem.txt";
 
@@ -10,42 +10,30 @@ fn main() {
 }
 
 fn part_one(lines: &Vec<Vec<char>>) -> u32 {
-    let score_map = HashMap::from([
-        (')', 3),
-        (']', 57),
-        ('}', 1197),
-        ('>', 25137),
-    ]);
+    let score_map = HashMap::from([(')', 3), (']', 57), ('}', 1197), ('>', 25137)]);
 
-    lines.into_iter().fold(0, |sum, line| {
-        match parse_line(line) {
-            (_, Some(illegal_char)) => sum + score_map.get(&illegal_char)
-                .expect("Expected score mapping for illegal char."),
+    lines
+        .into_iter()
+        .fold(0, |sum, line| match parse_line(line) {
+            (_, Some(illegal_char)) => {
+                sum + score_map
+                    .get(&illegal_char)
+                    .expect("Expected score mapping for illegal char.")
+            }
             (_, None) => sum,
-        }
-    })
+        })
 }
 
 fn part_two(lines: &Vec<Vec<char>>) -> u64 {
-    let score_map = HashMap::from([
-        ('(', 1),
-        ('[', 2),
-        ('{', 3),
-        ('<', 4),
-    ]);
+    let score_map = HashMap::from([('(', 1), ('[', 2), ('{', 3), ('<', 4)]);
 
-    let mut scores = lines.into_iter()
-        .map(|line| {
-            match parse_line(line) {
-                (stack, None) => {
-                    Some(
-                        stack.iter().rev().fold(0 as u64, |score, curr_char|
-                            5 * score + score_map.get(&curr_char).expect("Expected score for char")
-                        )
-                    )
-                },
-                (_, Some(_)) => None,
-            }
+    let mut scores = lines
+        .into_iter()
+        .map(|line| match parse_line(line) {
+            (stack, None) => Some(stack.iter().rev().fold(0 as u64, |score, curr_char| {
+                5 * score + score_map.get(&curr_char).expect("Expected score for char")
+            })),
+            (_, Some(_)) => None,
         })
         .filter(|score| score.is_some())
         .map(|score| score.unwrap())
@@ -82,11 +70,11 @@ fn parse_line(line: &Vec<char>) -> (Vec<char>, Option<char>) {
             match opt_last_char {
                 Some(&last_char) => {
                     if last_char != matching_open {
-                        return (char_stack, Some(line_char.clone()))
+                        return (char_stack, Some(line_char.clone()));
                     }
                     char_stack.pop();
                 }
-                None => return (char_stack, Some(line_char.clone()))
+                None => return (char_stack, Some(line_char.clone())),
             }
         } else {
             panic!("Unexpected character found: '{}'", line_char);
@@ -97,11 +85,10 @@ fn parse_line(line: &Vec<char>) -> (Vec<char>, Option<char>) {
 }
 
 fn get_subsystem_data(filename: &str) -> Vec<Vec<char>> {
-    fs::read_to_string(filename).expect("Something went wrong.")
+    fs::read_to_string(filename)
+        .expect("Something went wrong.")
         .trim_end()
         .split("\n")
-        .map(|s| {
-            str::to_string(s).chars().collect()
-        })
+        .map(|s| str::to_string(s).chars().collect())
         .collect()
 }

@@ -1,6 +1,6 @@
-use std::fs;
-use std::collections::HashSet;
 use std::cmp;
+use std::collections::HashSet;
+use std::fs;
 
 use num;
 
@@ -28,7 +28,7 @@ impl Line {
         let mut x = self.start.x;
         let mut y = self.start.y;
         for _ in 0..=self.length() {
-            points.push(Point{x, y});
+            points.push(Point { x, y });
             x += x_offset;
             y += y_offset;
         }
@@ -40,7 +40,7 @@ impl Line {
         return cmp::max(
             (self.start.x as i32 - self.end.x as i32).abs(),
             (self.start.y as i32 - self.end.y as i32).abs(),
-        ) as usize
+        ) as usize;
     }
 }
 
@@ -73,7 +73,7 @@ fn num_overlaps(lines: &Vec<Line>) -> usize {
 }
 
 fn is_axis_aligned(line: &Line) -> bool {
-    return line.start.x == line.end.x || line.start.y == line.end.y
+    return line.start.x == line.end.x || line.start.y == line.end.y;
 }
 
 fn parse_point(s: &str) -> Point {
@@ -83,11 +83,12 @@ fn parse_point(s: &str) -> Point {
     let x = parts[0].parse::<i32>().expect("Expected natural number.");
     let y = parts[1].parse::<i32>().expect("Expected natural number.");
 
-    return Point { x, y }
+    return Point { x, y };
 }
 
 fn get_data(filename: &str) -> Vec<Line> {
-    fs::read_to_string(filename).expect("Something went wrong.")
+    fs::read_to_string(filename)
+        .expect("Something went wrong.")
         .trim_end()
         .split("\n")
         .map(|s| {
@@ -97,7 +98,7 @@ fn get_data(filename: &str) -> Vec<Line> {
             return Line {
                 start: parse_point(parts[0]),
                 end: parse_point(parts[2]),
-            }
+            };
         })
         .collect()
 }

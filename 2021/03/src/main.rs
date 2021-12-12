@@ -19,13 +19,14 @@ fn part_one() -> u32 {
         }
     }
 
-    let gamma_bits: Vec<char> = epsilon_bits.iter().map(|c|
-        match c {
+    let gamma_bits: Vec<char> = epsilon_bits
+        .iter()
+        .map(|c| match c {
             '0' => '1',
             '1' => '0',
             _ => unreachable!("Unexpected character found '{}'", c),
-        }
-    ).collect();
+        })
+        .collect();
 
     let epsilon = bitstring_to_value(epsilon_bits);
     let gamma = bitstring_to_value(gamma_bits);
@@ -54,14 +55,25 @@ fn calculate_rating(report: &Vec<Vec<char>>, keep_most_common: bool) -> Vec<char
         let more_ones = has_more_ones(&rating_candidates, i);
         let keep_ones = (more_ones && keep_most_common) || (!more_ones && !keep_most_common);
 
-        rating_candidates = rating_candidates.into_iter().filter(|bits|
-            if keep_ones {bits[i] == '1'} else {bits[i] == '0'}
-        ).collect();
+        rating_candidates = rating_candidates
+            .into_iter()
+            .filter(|bits| {
+                if keep_ones {
+                    bits[i] == '1'
+                } else {
+                    bits[i] == '0'
+                }
+            })
+            .collect();
 
         i += 1;
     }
 
-    assert_eq!(rating_candidates.len(), 1, "Expected only one candidate to remain.");
+    assert_eq!(
+        rating_candidates.len(),
+        1,
+        "Expected only one candidate to remain."
+    );
 
     return rating_candidates[0].clone();
 }
@@ -72,7 +84,7 @@ fn has_more_ones(report: &Vec<Vec<char>>, bit_index: usize) -> bool {
         match char {
             '1' => num_ones + 1,
             '0' => num_ones,
-            _ => unreachable!("Unrecognized character found '{}'", char)
+            _ => unreachable!("Unrecognized character found '{}'", char),
         }
     });
 
@@ -80,12 +92,10 @@ fn has_more_ones(report: &Vec<Vec<char>>, bit_index: usize) -> bool {
 }
 
 fn bitstring_to_value(bitstring: Vec<char>) -> u32 {
-    bitstring.iter().fold(0, |epsilon, c| {
-        match c {
-            '1' => epsilon * 2 + 1,
-            '0' => epsilon * 2,
-            _ => unreachable!("Unrecognized character found '{}'", c),
-        }
+    bitstring.iter().fold(0, |epsilon, c| match c {
+        '1' => epsilon * 2 + 1,
+        '0' => epsilon * 2,
+        _ => unreachable!("Unrecognized character found '{}'", c),
     })
 }
 
