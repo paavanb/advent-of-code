@@ -28,7 +28,7 @@ fn get_lowest_risk(risk_map: &Vec<Vec<u8>>) -> Option<u32> {
 
     let (row_length, col_length) = get_dimensions(&risk_map);
 
-    // Initialize heap with all nodes
+    // Initialize queue with all nodes
     for row in 0..row_length {
         for col in 0..col_length {
             // Skip the starting position, we will consider it first
